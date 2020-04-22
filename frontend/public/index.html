@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Loading axios library necessary for making HTTP GET requests -->
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        
+        <title>Online Exam</title>
+    </head>
+    <body>
+        <div class="container">
+            <div id="question-container">
+                <span id = "countdown"></span>
+                <div id="Question"></div>
+
+                <div><input type="number" name="answer" id="answer" placeholder="Your answer"/></div>
+            </div>
+        </div>
+        <div class="controls">
+            <button id="start-btn" class="start-btn btn">Start</button>
+            <input type="submit" name="submit" id="submit" value="Submit!" onclick="submit()"/>
+        </div>
+        <div>
+            <span id="result"></span>
+        </div>
+
+    </body>
+    <script type="text/javascript" src="script.js"></script>
+</html>
