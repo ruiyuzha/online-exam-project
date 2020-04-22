@@ -95,7 +95,7 @@ async function handleGet(req, res, query) {
   console.log("outputString: ", outputString);
 
   // Let's generate some artificial delay!
-  await delay(3000);
+  await delay(500);
 
   // Send it back to the frontend.
   res.send(outputString);

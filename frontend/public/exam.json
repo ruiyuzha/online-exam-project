@@ -9,5 +9,11 @@
     "Que": "2*3=",
     "CorrectAns": "6",
     "Points": 2
+  },
+  {
+    "Num": 3,
+    "Que": "2-6=",
+    "CorrectAns": "-4",
+    "Points": 2
   }
 ]
