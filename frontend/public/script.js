@@ -2,19 +2,38 @@
 //let data = JSON.parse(fs.readFileSync('public/exam.json').toString());
 //const data = require('./exam.json');
 //let exam = data[0];
-/*let loader = document.getElementById("loader");
-loader.style.display = "none";
 
 const startButton = document.getElementById('start-btn');
 const questionContainerElement = document.getElementById('question-container');
+const countdown_element = document.getElementById('countdown');
 
+let startingMinutes = 3;
+let time = startingMinutes * 60;
+let interval;
 startButton.addEventListener('click', startGame);
 
 function startGame() {
     console.log('Start');
     startButton.classList.add('hide');
-    questionContainerElement.remove('hide');
-}*/
+    questionContainerElement.classList.remove('hide');
+       
+    interval = setInterval(updateCountdown, 1000); 
+}
+
+function updateCountdown(){
+    const minutes = Math.floor(time/60);
+    let seconds = time % 60;
+    
+    seconds = seconds < 10 ? '0' +seconds : seconds;
+
+    countdown_element.innerHTML = `${minutes}:${seconds}`;
+    time--;
+
+    if (seconds=='00' && minutes=='00'){
+        clearInterval(interval);
+        submit();
+    }
+}
 
 let exam = {
     "Num": 1,
@@ -62,24 +81,3 @@ async function submit(){
 }
 
 //Countdown
-const startingMinutes = 3;
-let time = startingMinutes * 60;
-
-const countdown_element = document.getElementById('countdown');
-
-let interval = setInterval(updateCountdown, 1000);
-
-function updateCountdown(){
-    const minutes = Math.floor(time/60);
-    let seconds = time % 60;
-    
-    seconds = seconds < 10 ? '0' +seconds : seconds;
-
-    countdown_element.innerHTML = `${minutes}:${seconds}`;
-    time--;
-
-    if (seconds=='00' && minutes=='00'){
-        clearInterval(interval);
-        submit();
-    }
-}
