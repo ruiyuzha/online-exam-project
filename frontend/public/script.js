@@ -27,15 +27,23 @@ let exam = [
 const startButton = document.getElementById('start-btn');
 const nextButton = document.getElementById('next-btn');
 const submitButton = document.getElementById('submit-btn');
+const homepageContainer_element = document.getElementById('home-container');
+const examTitle_element = document.getElementById('exam-title');
+const examInformation_element = document.getElementById('exam-information');
 const questionContainerElement = document.getElementById('question-container');
+const countdownContainerElement = document.getElementById('countdown-container');
+const questionNumber_element = document.getElementById('question-number');
 const question_element = document.getElementById('question');
 const countdown_element = document.getElementById('countdown');
+const header_element = document.getElementById('header');
 
 let startingMinutes = 3;
 let time = startingMinutes * 60;
 let interval;
 let currentQuestionIndex;
 let lengthOfExam = exam.length;
+
+examInformation_element.innerHTML = 'This exam contains ' + lengthOfExam + ' questions and ' + 'lasts ' + startingMinutes + ' mins.';
 
 startButton.addEventListener('click', startGame);
 
@@ -44,8 +52,9 @@ nextButton.addEventListener('click', () => {
     //await delay(1000);
     
     currentQuestionIndex++;
-    question_element.innerText = "Que" + exam[currentQuestionIndex].Num + ": " + exam[currentQuestionIndex].Que;   
-
+    questionNumber_element.innerHTML = "Question " + exam[currentQuestionIndex].Num + ": ";
+    question_element.innerText = exam[currentQuestionIndex].Que;
+    
     if (currentQuestionIndex == (lengthOfExam-1)){
         nextButton.classList.add('hide');
         submitButton.classList.remove('hide');
@@ -55,12 +64,16 @@ nextButton.addEventListener('click', () => {
 
 function startGame() {
     console.log('Start');
+    homepageContainer_element.classList.add('hide');
     startButton.classList.add('hide');
+    header_element.classList.add('parent');
     currentQuestionIndex = 0;
+    countdownContainerElement.classList.remove('hide');
     questionContainerElement.classList.remove('hide');
     nextButton.classList.remove('hide');
     console.log(exam.length);
-    question_element.innerText = "Que" + exam[currentQuestionIndex].Num + ": " + exam[currentQuestionIndex].Que;
+    questionNumber_element.innerHTML = "Question " + exam[currentQuestionIndex].Num + ": ";
+    question_element.innerText = exam[currentQuestionIndex].Que;
        
     interval = setInterval(updateCountdown, 1000); 
 }
@@ -112,7 +125,3 @@ async function submit(){
     }
 
 }
-
-const delay = function (t) {
-    return new Promise((resolve) => setTimeout(resolve, t));
-  };
