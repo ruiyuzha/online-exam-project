@@ -1,7 +1,10 @@
 "use strict";
 
 const express = require("express");
+const fs = require('fs');
 const app = express();
+let obj = {};
+obj.table = [];
 
 // We need cors middleware to bypass CORS security in browsers.
 const cors = require("cors");
@@ -91,8 +94,14 @@ async function handleGet(req, res, query) {
   };
 
   // Convert output to JSON
+  obj.table.push(output);
   let outputString = JSON.stringify(output, null, 2);
   console.log("outputString: ", outputString);
+
+  fs.writeFile('myfile.json', JSON.stringify(obj, null, 2), (err) => {
+    if (err) throw err
+    console.log('The file has been saved!')
+  })
 
   // Let's generate some artificial delay!
   await delay(500);

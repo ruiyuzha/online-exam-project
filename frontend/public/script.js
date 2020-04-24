@@ -93,7 +93,10 @@ function updateCountdown(){
     }
 }
 
-submitButton.addEventListener('click', submit);
+submitButton.addEventListener('click', ()=>{
+    submit();
+    clearInterval(interval);
+});
 
 async function submit(){
     console.log("In submit!");
@@ -112,6 +115,7 @@ async function submit(){
         const data = await axios.get(request);
 
         console.log("data.data: ", JSON.stringify(data.data, null, 2));
+
 
         // Display the random value
         // if (data.data.result){
