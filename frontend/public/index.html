@@ -65,7 +65,6 @@
 
                 <div>
                     <button id="next-btn" class="btn btn-primary hide">Next</button>
-                    <!-- <input type="submit" name="submit" id="submit" value="Submit!" onclick="submit()"/> -->
                 </div>
 
             </div>
@@ -85,17 +84,25 @@
                 <div>
                     <button id="next-btn2" class="btn btn-primary">Next</button>
                     <button id="submit-btn" class= "btn btn-primary hide">Submit</button>
-                    <!-- <input type="submit" name="submit" id="submit" value="Submit!" onclick="submit()"/> -->
+                    <button id="result-btn" class="btn btn-link hide">Show test result!</button>
                 </div>
-
-            </div>
-
-            
+            </div>            
         </div>
 
         
-        <div>
-            <span id="result"></span>
+        <div id="result-container" class="card hide">
+            <div class="card-body">
+                <strong><h5 class="card-title">TEST RESULT</h5></strong>
+                <ul class="list-group list-group-flush">
+                    <li id="q1" class="list-group-item"></li>
+                    <li id="q2" class="list-group-item"></li>
+                    <li id="q3" class="list-group-item"></li>
+                    <li id="q4" class="list-group-item"></li>
+                    <li id="q5" class="list-group-item"></li>
+                    <li id="result" class="list-group-item"></li>            
+                </ul>
+            </div>
+            
         </div>
 
         <!-- Optional JavaScript -->

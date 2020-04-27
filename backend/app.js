@@ -76,7 +76,6 @@ async function handleGet(req, res, query) {
     result = isCorrect(your_ans, correct_ans);
     if (result){
         console.log("Correct");
-        points = query.points
     }
     else{
         console.log("Wrong");

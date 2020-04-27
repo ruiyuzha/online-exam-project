@@ -54,6 +54,7 @@ const startButton = document.getElementById('start-btn');
 const nextButton = document.getElementById('next-btn');
 const nextButton1 = document.getElementById('next-btn2');
 const submitButton = document.getElementById('submit-btn');
+const resultButton = document.getElementById('result-btn');
 const homepageContainer_element = document.getElementById('home-container');
 const examTitle_element = document.getElementById('exam-title');
 const examInformation_element = document.getElementById('exam-information');
@@ -75,6 +76,9 @@ const questionContainer2Element = document.getElementById('question-container2')
 const questionNumber2_element = document.getElementById('question-number2');
 const question2_element = document.getElementById('question2');
 
+const resultContainerElement = document.getElementById('result-container');
+const result_element = document.getElementById("result");
+
 let startingMinutes = 3;
 let time = startingMinutes * 60;
 let interval;
@@ -82,6 +86,9 @@ let currentQuestionIndex;
 let lengthOfMultiple = exam["Multiple-Choice"].length;
 let lengthOfFill = exam["Fill-in"].length;
 let lengthOfExam = exam["Multiple-Choice"].length+exam["Fill-in"].length;
+let result_form = {};
+result_form.res = [];
+result_form.points = [];
 
 examInformation_element.innerHTML = 'This exam contains ' + lengthOfExam + ' questions and ' + 'lasts ' + startingMinutes + ' mins.';
 
@@ -114,6 +121,19 @@ nextButton1.addEventListener('click', () => {
         submitButton.classList.remove('hide');
     }      
 })
+
+submitButton.addEventListener('click', ()=>{
+    submit();
+    clearInterval(interval);
+    resultButton.classList.remove('hide');
+});
+
+resultButton.addEventListener('click',() =>{
+    questionContainer2Element.classList.add('hide');
+    header_element.classList.add('hide');
+    displayResult(result_form);
+
+});
 
 function initialize(){
     document.getElementById("answer").value = "";
@@ -149,6 +169,23 @@ function displayQuestion2(){
     question2_element.innerText = exam["Fill-in"][currentQuestionIndex-lengthOfMultiple].Que;
 }
 
+function displayResult(result_form){   
+    resultContainerElement.classList.remove('hide');
+    
+    let totoalpoints=0;
+    for (let i=0;i<result_form["res"].length;i++){
+        //result_element.innerText="Question"+(i+1)+": "+result_form["res"][i];
+        totoalpoints+=result_form["points"][i];
+    }
+    document.getElementById("q1").innerText = "Question1: "+result_form["res"][0];
+    document.getElementById("q2").innerText = "Question2: "+result_form["res"][1];
+    document.getElementById("q3").innerText = "Question3: "+result_form["res"][2];
+    document.getElementById("q4").innerText = "Question4: "+result_form["res"][3];
+    document.getElementById("q5").innerText = "Question5: "+result_form["res"][4];
+    console.log(totoalpoints);
+    result_element.innerText="Congratulations! You got "+totoalpoints+" points.";
+}
+
 function updateCountdown(){
     const minutes = Math.floor(time/60);
     let seconds = time % 60;
@@ -164,22 +201,15 @@ function updateCountdown(){
     }
 }
 
-submitButton.addEventListener('click', ()=>{
-    submit();
-    clearInterval(interval);
-});
-
 async function submit(){
     console.log("In submit!");
 
-    let result_element = document.getElementById("result");
     //result_element.innerHTML = "Please wait...";
 
     try{
         let correct_ans;
         let your_ans;
         let currentPoints;
-        let total_points;
         if(currentQuestionIndex <= (exam["Multiple-Choice"].length-1)){
             correct_ans = exam["Multiple-Choice"][currentQuestionIndex].CorrectAns;
             currentPoints = exam["Multiple-Choice"][currentQuestionIndex].Points;
@@ -187,7 +217,7 @@ async function submit(){
             
         } else{
             correct_ans = exam["Fill-in"][currentQuestionIndex-lengthOfMultiple].CorrectAns;
-            currentPoints = exam["Multiple-Choice"][currentQuestionIndex-lengthOfMultiple].Points;
+            currentPoints = exam["Fill-in"][currentQuestionIndex-lengthOfMultiple].Points;
             your_ans = document.getElementById("answer2").value;
         }
 
@@ -200,12 +230,15 @@ async function submit(){
         console.log("data.data: ", JSON.stringify(data.data, null, 2));
 
         if (data.data.result){
-            total_points = total_points+currentPoints;
+            result_form.res.push("Correct");
+            result_form.points.push(currentPoints);
             //result_element.innerHTML = "Correct!";
         }else{
+            result_form.res.push("Wrong");
+            result_form.points.push(0);
             //result_element.innerHTML = "Wrong!";
         }
-        console.log(total_points);
+        console.log(result_form);
         
     } catch (error) {
         console.log("error: ", error);
