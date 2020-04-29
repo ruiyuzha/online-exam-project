@@ -1,5 +1,5 @@
 # online-exam-project
-This is the final project for EE599. The aim of this project is to create a website which allows users to take an online exam and submit their answers.
+This is the final project for EE599. The aim of this project is to create a website which allows users to take an online exam and submit their answers. In this project, I used NodeJS Express Library and fs module in the backend and Bootstrap and CSS in the frontend.
 
 The frontend contains: 
  - a home page that shows some details of exam including the number of exam question and the duration of this exam
