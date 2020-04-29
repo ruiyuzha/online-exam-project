@@ -49,7 +49,9 @@ let exam = {
 
 const startButton = document.getElementById('start-btn');
 const nextButton = document.getElementById('next-btn');
+const previousButton = document.getElementById('previous-btn');
 const nextButton1 = document.getElementById('next-btn2');
+const previousButton1 = document.getElementById('previous-btn2');
 const submitButton = document.getElementById('submit-btn');
 const resultButton = document.getElementById('result-btn');
 const homepageContainer_element = document.getElementById('home-container');
@@ -82,6 +84,7 @@ let interval;
 let currentQuestionIndex;
 
 let result_form = {};
+result_form.id = [];
 result_form.res = [];
 result_form.points = [];
 
@@ -101,15 +104,26 @@ nextButton.addEventListener('click', () => {
     submit();
     
     currentQuestionIndex++;
-    if(currentQuestionIndex <= (lengthOfMultiple-1)){
+    if(currentQuestionIndex == 1){
+        previousButton.classList.remove('hide');
+        initialize();
+        displayQuestion1();
+    }else if(currentQuestionIndex > 1 && currentQuestionIndex <= (lengthOfMultiple-1)){
         initialize();
         displayQuestion1();
     }else{
         questionContainer1Element.classList.add('hide');
         questionContainer2Element.classList.remove('hide');
+        previousButton1.classList.remove('hide');
         initialize();
         displayQuestion2();
     }
+})
+
+previousButton.addEventListener('click',() =>{
+    currentQuestionIndex--;
+    initialize();
+    displayQuestion1();
 })
 
 nextButton1.addEventListener('click', () => {
@@ -123,6 +137,11 @@ nextButton1.addEventListener('click', () => {
         nextButton1.classList.add('hide');
         submitButton.classList.remove('hide');
     }      
+})
+
+previousButton1.addEventListener('click',() =>{
+    currentQuestionIndex--;
+    displayQuestion2();
 })
 
 submitButton.addEventListener('click', ()=>{
@@ -177,15 +196,33 @@ function displayResult(result_form){
     resultContainerElement.classList.remove('hide');
     
     let totoalpoints=0;
-    for (let i=0;i<result_form["res"].length;i++){
-        //result_element.innerText="Question"+(i+1)+": "+result_form["res"][i];
-        totoalpoints+=result_form["points"][i];
+    let test_res={};
+    test_res.id=[];
+    test_res.res=[];
+    test_res.points=[];
+
+    for (let i = 0; i < result_form["id"].length; i++) {
+        if ( test_res["id"].indexOf(result_form["id"][i]) === -1) {
+            test_res["id"] .push(result_form["id"][i]);
+            test_res["res"] .push(result_form["res"][i]);
+            test_res["points"] .push(result_form["points"][i]);
+        }else{
+            test_res["id"][i-1]=result_form["id"][i];
+            test_res["res"][i-1]=result_form["res"][i];
+            test_res["points"][i-1]=result_form["points"][i];
+        }
     }
-    document.getElementById("q1").innerText = "Question1: "+result_form["res"][0];
-    document.getElementById("q2").innerText = "Question2: "+result_form["res"][1];
-    document.getElementById("q3").innerText = "Question3: "+result_form["res"][2];
-    document.getElementById("q4").innerText = "Question4: "+result_form["res"][3];
-    document.getElementById("q5").innerText = "Question5: "+result_form["res"][4];
+    console.log(test_res);
+    
+    for (let i=0;i<test_res["res"].length;i++){
+        //result_element.innerText="Question"+(i+1)+": "+result_form["res"][i];
+        totoalpoints+=test_res["points"][i];
+    }
+    document.getElementById("q1").innerText = "Question1: "+test_res["res"][0];
+    document.getElementById("q2").innerText = "Question2: "+test_res["res"][1];
+    document.getElementById("q3").innerText = "Question3: "+test_res["res"][2];
+    document.getElementById("q4").innerText = "Question4: "+test_res["res"][3];
+    document.getElementById("q5").innerText = "Question5: "+test_res["res"][4];
     console.log(totoalpoints);
     result_element.innerText="Congratulations! You got "+totoalpoints+" points.";
 }
@@ -211,20 +248,23 @@ async function submit(){
     try{
         let correct_ans;
         let your_ans;
+        let que_id;
         let currentPoints;
-        let lengthOfMultiple = exam["Multiple-Choice"].length;
+
         if(currentQuestionIndex <= (exam["Multiple-Choice"].length-1)){
             correct_ans = exam["Multiple-Choice"][currentQuestionIndex].CorrectAns;
             currentPoints = exam["Multiple-Choice"][currentQuestionIndex].Points;
+            que_id = exam["Multiple-Choice"][currentQuestionIndex].Num;
             your_ans = document.getElementById("answer").value;
             
         } else{
             correct_ans = exam["Fill-in"][currentQuestionIndex-lengthOfMultiple].CorrectAns;
             currentPoints = exam["Fill-in"][currentQuestionIndex-lengthOfMultiple].Points;
+            que_id = exam["Fill-in"][currentQuestionIndex-lengthOfMultiple].Num;
             your_ans = document.getElementById("answer2").value;
         }
 
-        let request = `http://127.0.0.1:5000/?your_ans=${your_ans}&correct_ans=${correct_ans}`;
+        let request = `http://127.0.0.1:5000/?que_id=${que_id}&your_ans=${your_ans}&correct_ans=${correct_ans}&points=${currentPoints}`;
         console.log("request: ", request);
 
         // Send an HTTP GET request to the backend
@@ -233,11 +273,14 @@ async function submit(){
         console.log("data.data: ", JSON.stringify(data.data, null, 2));
 
         if (data.data.result){
+            result_form.id.push(que_id);
             result_form.res.push("Correct");
             result_form.points.push(currentPoints);
         }else{
+            result_form.id.push(que_id);
             result_form.res.push("Wrong");
             result_form.points.push(0);
+            
         }
         console.log(result_form);
         

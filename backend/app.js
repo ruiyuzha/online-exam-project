@@ -64,9 +64,11 @@ app.listen(port, (err) => {
  */
 async function handleGet(req, res, query) {
   let error = "NO_ERROR";
+  let que_id;
   let your_ans;
   let correct_ans;
   let result;
+  let points;
 
   console.log("query: ", JSON.stringify(query));
   // If there was a query (a query string was sent)
@@ -75,15 +77,18 @@ async function handleGet(req, res, query) {
     query.your_ans !== undefined &&
     query.correct_ans !== undefined) {
     
+    que_id = query.que_id;
     your_ans = query.your_ans;
     correct_ans = query.correct_ans;
     
     result = isCorrect(your_ans, correct_ans);
     if (result){
         console.log("Correct");
+        points = query.points;
     }
     else{
         console.log("Wrong");
+        points = "0";
     }
   } else {
     error = "ERROR: min_value or max_value not provided";
@@ -91,9 +96,11 @@ async function handleGet(req, res, query) {
 
   // Generate the output
   let output = {
+    que_id: que_id,
     result: result,
     your_ans: your_ans,
     correct_ans: correct_ans,
+    points: points,
     error: error,
   };
 
