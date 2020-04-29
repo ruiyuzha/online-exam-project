@@ -37,7 +37,9 @@ node app.js
 
 You can test backend by installing and running [Postman](https://www.postman.com/downloads/):
 
-<img alt="Backend" src="https://github.com/ourarash/nodejs_fullstack/blob/master/backend/screenshot.png?raw=true" width="400">
+<img alt="Backend" src="https://github.com/ruiyuzha/online-exam-project/blob/master/backend/backend-loadjson.png?raw=true" width="400">
+
+<img alt="Backend" src="https://github.com/ruiyuzha/online-exam-project/blob/master/backend/backend-correctness.png?raw=true" width="400">
 
 
 ## Running Frontend:
@@ -47,5 +49,3 @@ node app.js
 ```
 
 Then open your browser to http://localhost:3000:
-
-<img alt="Frontend" src="https://github.com/ourarash/nodejs_fullstack/blob/master/frontend/screenshot.png?raw=true" width="400">
