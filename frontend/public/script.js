@@ -1,15 +1,12 @@
-//const fs = require('fs');
-//let exam = JSON.parse(fs.readFileSync('public/exam.json').toString());
-
 let exam = {
     "Multiple-Choice":[
       {
         "Num": 1,
         "Que": "Inside which HTML element do we put the JavaScript?",
         "Choice":[
-          {"text": "script","correctness": true},
-          {"text": "html","correctness": false},
-          {"text": "scripting","correctness":false},
+          {"text": "<script>","correctness": true},
+          {"text": "<html>","correctness": false},
+          {"text": "<scripting>","correctness":false},
           {"text": "None of above","correctness":false}
         ],
         "CorrectAns":"1",
@@ -48,7 +45,7 @@ let exam = {
     }
   
     ]
-  }
+}
 
 const startButton = document.getElementById('start-btn');
 const nextButton = document.getElementById('next-btn');
@@ -83,14 +80,20 @@ let startingMinutes = 3;
 let time = startingMinutes * 60;
 let interval;
 let currentQuestionIndex;
-let lengthOfMultiple = exam["Multiple-Choice"].length;
-let lengthOfFill = exam["Fill-in"].length;
-let lengthOfExam = exam["Multiple-Choice"].length+exam["Fill-in"].length;
+
 let result_form = {};
 result_form.res = [];
 result_form.points = [];
 
+
+readJson();
+//console.log(exam);
+
+let lengthOfMultiple = exam["Multiple-Choice"].length;
+let lengthOfFill = exam["Fill-in"].length;
+let lengthOfExam = exam["Multiple-Choice"].length+exam["Fill-in"].length;
 examInformation_element.innerHTML = 'This exam contains ' + lengthOfExam + ' questions and ' + 'lasts ' + startingMinutes + ' mins.';
+
 
 startButton.addEventListener('click', startGame);
 
@@ -165,6 +168,7 @@ function displayQuestion1(){
 }
 
 function displayQuestion2(){
+    let lengthOfMultiple = exam["Multiple-Choice"].length;
     questionNumber2_element.innerHTML = "Question " + exam["Fill-in"][currentQuestionIndex-lengthOfMultiple].Num + ": ";
     question2_element.innerText = exam["Fill-in"][currentQuestionIndex-lengthOfMultiple].Que;
 }
@@ -204,12 +208,11 @@ function updateCountdown(){
 async function submit(){
     console.log("In submit!");
 
-    //result_element.innerHTML = "Please wait...";
-
     try{
         let correct_ans;
         let your_ans;
         let currentPoints;
+        let lengthOfMultiple = exam["Multiple-Choice"].length;
         if(currentQuestionIndex <= (exam["Multiple-Choice"].length-1)){
             correct_ans = exam["Multiple-Choice"][currentQuestionIndex].CorrectAns;
             currentPoints = exam["Multiple-Choice"][currentQuestionIndex].Points;
@@ -232,11 +235,9 @@ async function submit(){
         if (data.data.result){
             result_form.res.push("Correct");
             result_form.points.push(currentPoints);
-            //result_element.innerHTML = "Correct!";
         }else{
             result_form.res.push("Wrong");
             result_form.points.push(0);
-            //result_element.innerHTML = "Wrong!";
         }
         console.log(result_form);
         
@@ -244,4 +245,14 @@ async function submit(){
         console.log("error: ", error);
     }
 
+}
+
+async function readJson(){
+    console.log("Load json file!");
+    let request = `http://127.0.0.1:5000/?quiz_ID=${1}`;
+    console.log("request: ", request);
+    const data = await axios.get(request);
+
+    quiz = JSON.stringify(data.data, null, 2);
+    console.log(quiz);
 }

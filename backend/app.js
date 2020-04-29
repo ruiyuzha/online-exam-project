@@ -3,6 +3,7 @@
 const express = require("express");
 const fs = require('fs');
 const app = express();
+const exam = fs.readFileSync("/Users/apple/Desktop/online-exam-project/frontend/public/db.json")
 let obj = {};
 obj.table = [];
 
@@ -37,8 +38,13 @@ const delay = function (t) {
  */
 app.get("/", async function (req, res) {
   if (req.query && Object.keys(req.query).length > 0) {
-    console.log("I got a query!");
-    handleGet(res, res, req.query);
+    if (req.query.quiz_ID == "1"){
+      console.log('success');
+      res.send(exam);
+    }else{
+      console.log("I got a query!");
+      handleGet(res, res, req.query);
+    }
   }
 });
 
@@ -61,7 +67,6 @@ async function handleGet(req, res, query) {
   let your_ans;
   let correct_ans;
   let result;
-  let points;
 
   console.log("query: ", JSON.stringify(query));
   // If there was a query (a query string was sent)
