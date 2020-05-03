@@ -3,6 +3,7 @@
 const express = require("express");
 const fs = require('fs');
 const app = express();
+// Load a json file
 const exam = fs.readFileSync("/Users/apple/Desktop/online-exam-project/frontend/public/db.json")
 let obj = {};
 obj.table = [];
@@ -109,7 +110,8 @@ async function handleGet(req, res, query) {
   let outputString = JSON.stringify(output, null, 2);
   console.log("outputString: ", outputString);
 
-  fs.writeFile('myfile.json', JSON.stringify(obj, null, 2), (err) => {
+  // Save the results to a json file
+  fs.writeFile('myresult.json', JSON.stringify(obj, null, 2), (err) => {
     if (err) throw err
     console.log('The file has been saved!')
   })

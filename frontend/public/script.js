@@ -90,7 +90,6 @@ result_form.points = [];
 
 
 readJson();
-//console.log(exam);
 
 let lengthOfMultiple = exam["Multiple-Choice"].length;
 let lengthOfFill = exam["Fill-in"].length;
@@ -129,19 +128,23 @@ previousButton.addEventListener('click',() =>{
 nextButton1.addEventListener('click', () => {
     submit();
     
-    currentQuestionIndex++;
-    initialize();
-    displayQuestion2();
-    
     if(currentQuestionIndex == (lengthOfExam-1)){
         nextButton1.classList.add('hide');
-        submitButton.classList.remove('hide');
-    }      
+    }  
+    currentQuestionIndex++;
+    initialize();
+    displayQuestion2();     
 })
 
 previousButton1.addEventListener('click',() =>{
     currentQuestionIndex--;
-    displayQuestion2();
+    if (currentQuestionIndex == 1){
+        questionContainer2Element.classList.add('hide');
+        questionContainer1Element.classList.remove('hide');
+        displayQuestion1();
+    }else{
+        displayQuestion2();
+    }   
 })
 
 submitButton.addEventListener('click', ()=>{
@@ -151,17 +154,25 @@ submitButton.addEventListener('click', ()=>{
 });
 
 resultButton.addEventListener('click',() =>{
+    questionContainer1Element.classList.add('hide');
     questionContainer2Element.classList.add('hide');
     header_element.classList.add('hide');
     displayResult(result_form);
 
 });
 
+/**
+ * Initialize the input text area
+ */
 function initialize(){
     document.getElementById("answer").value = "";
     document.getElementById("answer2").value = "";
 }
 
+/**
+ * Define the actions when the start button is pressed:
+ * displays the 1st question and the timer starts
+ */
 function startGame() {
     console.log('Start');
     homepageContainer_element.classList.add('hide');
@@ -177,6 +188,9 @@ function startGame() {
     interval = setInterval(updateCountdown, 1000); 
 }
 
+/**
+ * Define the form of the multiple choice question
+ */
 function displayQuestion1(){
     questionNumber_element.innerHTML = "Question " + exam["Multiple-Choice"][currentQuestionIndex].Num + ": ";
     question_element.innerText = exam["Multiple-Choice"][currentQuestionIndex].Que;
@@ -186,12 +200,20 @@ function displayQuestion1(){
     choice4_element.innerText = exam["Multiple-Choice"][currentQuestionIndex].Choice[3]["text"];
 }
 
+/**
+ * Define the form of fill in question
+ */
 function displayQuestion2(){
     let lengthOfMultiple = exam["Multiple-Choice"].length;
     questionNumber2_element.innerHTML = "Question " + exam["Fill-in"][currentQuestionIndex-lengthOfMultiple].Num + ": ";
     question2_element.innerText = exam["Fill-in"][currentQuestionIndex-lengthOfMultiple].Que;
 }
 
+/**
+ * Define the webpage that shows test results
+ * (contains the correctness of each equation, points of each equation and total points)
+ * @param {object} result_form 
+ */
 function displayResult(result_form){   
     resultContainerElement.classList.remove('hide');
     
@@ -201,6 +223,9 @@ function displayResult(result_form){
     test_res.res=[];
     test_res.points=[];
 
+    //Delete the duplicate terms in test results
+    //(Due to the existence of previous button, some test results will to stored in multiple times. 
+    //Thus, we only need to keep the last submission of each question)
     for (let i = 0; i < result_form["id"].length; i++) {
         if ( test_res["id"].indexOf(result_form["id"][i]) === -1) {
             test_res["id"] .push(result_form["id"][i]);
@@ -227,6 +252,11 @@ function displayResult(result_form){
     result_element.innerText="Congratulations! You got "+totoalpoints+" points.";
 }
 
+/**
+ * Define the countdown timer:
+ * Display the number in minute and second parts in inverse order;
+ * When the time is out the function submit() is called automatically
+ */
 function updateCountdown(){
     const minutes = Math.floor(time/60);
     let seconds = time % 60;
@@ -242,6 +272,10 @@ function updateCountdown(){
     }
 }
 
+/**
+ * Send a GET HTTP request that contains "que_ID", "your_ans", "correct_ans" and "points" to the backend
+ * and judgement results of each question is sent back to the frontend
+ */
 async function submit(){
     console.log("In submit!");
 
@@ -279,10 +313,8 @@ async function submit(){
         }else{
             result_form.id.push(que_id);
             result_form.res.push("Wrong");
-            result_form.points.push(0);
-            
+            result_form.points.push(0);  
         }
-        console.log(result_form);
         
     } catch (error) {
         console.log("error: ", error);
@@ -290,6 +322,9 @@ async function submit(){
 
 }
 
+/**
+ * Send a Get HTTP request to the backend and send the object of exam paper back to the frontend
+ */
 async function readJson(){
     console.log("Load json file!");
     let request = `http://127.0.0.1:5000/?quiz_ID=${1}`;
@@ -298,4 +333,7 @@ async function readJson(){
 
     quiz = JSON.stringify(data.data, null, 2);
     console.log(quiz);
+    //return quiz
+    //Bug: Actually, this function has a return value to define the variable 'exam'. But, this function loadJson spends
+    //too much time and causes some problems to read exam information in homepage (needs future improvments)
 }
