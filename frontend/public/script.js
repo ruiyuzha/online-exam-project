@@ -127,13 +127,14 @@ previousButton.addEventListener('click',() =>{
 
 nextButton1.addEventListener('click', () => {
     submit();
-    
-    if(currentQuestionIndex == (lengthOfExam-1)){
-        nextButton1.classList.add('hide');
-    }  
+      
     currentQuestionIndex++;
     initialize();
-    displayQuestion2();     
+    displayQuestion2();
+    if(currentQuestionIndex == (lengthOfExam-1)){
+        nextButton1.classList.add('hide');
+        submitButton.classList.remove('hide');
+    }     
 })
 
 previousButton1.addEventListener('click',() =>{
