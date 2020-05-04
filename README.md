@@ -56,6 +56,15 @@ Then open your browser to http://localhost:3000:
 https://youtu.be/2JdqLB7rfUc
 
 
-## Funture Improvements
+## Future Improvements
 
-- Improvements on the current version:
+- Improvements on the current version: In the program, I define a variable `currentQuestionIndex` represents the question number: whenever you press the next button the `currentQuestionIndex` will increase 1 and whenever you press the previous button the `currentQuestionIndex` will decrease 1. This is not a good way. I should use the variable `que_ID` to locate these questions. 
+
+- Add a login system allows multi-users: professors can be acted as an admin to upload exam paper and students can be acted as guest to answer these questions. In this way, the test results can be improved by saving these information of each user in different files.
+
+- Add more functions to make this project more complete: 
+
+eg: send students answers to professor by email; 
+
+send a notification to students before th exam starts
+
