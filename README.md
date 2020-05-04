@@ -64,5 +64,5 @@ https://youtu.be/2JdqLB7rfUc
 
 - Add more functions to make this project more complete: 
 
-  eg: send students answers to professor by email; send a notification to students before th exam starts
+  eg: send students answers to professor by email; send a notification to students before the exam starts
 
