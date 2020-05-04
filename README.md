@@ -54,3 +54,8 @@ Then open your browser to http://localhost:3000:
 ## A demo video:
 
 https://youtu.be/2JdqLB7rfUc
+
+
+## Funture Improvements
+
+- Improvements on the current version:
